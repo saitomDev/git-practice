@@ -1,0 +1,27 @@
+name: Create Release Tag
+
+on:
+  push:
+    branches:
+      - release/*
+
+jobs:
+  create_tag:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+
+      - name: Set up Git
+        run: |
+          git config --global user.name 'Your Name'
+          git config --global user.email 'you@example.com'
+
+      - name: Determine date from branch name
+        id: extract_date
+        run: echo "::set-output name=date::$(echo ${GITHUB_REF#refs/heads/release/})"
+
+      - name: Create and push tag
+        run: |
+          git tag ${{ steps.extract_date.outputs.date }}
+          git push origin ${{ steps.extract_date.outputs.date }}
