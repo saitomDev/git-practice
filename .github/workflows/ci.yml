@@ -1,0 +1,13 @@
+# どれが
+name: Continuous Integration
+# いつ
+on: push
+# どこで
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    # ここに他のステップを追加する
