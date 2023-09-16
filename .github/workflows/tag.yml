@@ -4,6 +4,7 @@ on:
   pull_request:
     branches:
       - main
+    # ↓これMergeがない 
     types: 
       - closed
 
@@ -20,11 +21,17 @@ jobs:
         env:
           TZ: 'Asia/Tokyo'
         run: echo "current_date=$(date +'%Y%m%d%H%M')" >> $GITHUB_ENV
+      - name: Get branch name
+        id: get_branch_name
+        run: echo "branch_name=${{ github.ref }}" 
+        # >> $GITHUB_ENV
       - name: Create release
         id: create_release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        # ERROR :Resource not accessible by integration
+        # https://zenn.dev/tatsugon/articles/github-actions-permission-error
         with:
           tag_name: ${{ env.current_date }}
           release_name: ${{ env.current_date }}
