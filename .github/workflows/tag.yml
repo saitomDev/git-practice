@@ -3,25 +3,29 @@ name: Create Release Tag
 on:
   push:
     branches:
-      - release/*
+      - main
+    types: [closed]
 
 jobs:
-  create_tag:
+  build:
+    name: Create Release
     runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == true
     steps:
-      - name: Check out repository
+      - name: Checkout code
         uses: actions/checkout@v2
-
-      - name: Set up Git
-        run: |
-          git config --global user.name 'Your Name'
-          git config --global user.email 'you@example.com'
-
-      - name: Determine date from branch name
-        id: extract_date
-        run: echo "::set-output name=date::$(echo ${GITHUB_REF#refs/heads/release/})"
-
-      - name: Create and push tag
-        run: |
-          git tag ${{ steps.extract_date.outputs.date }}
-          git push origin ${{ steps.extract_date.outputs.date }}
+      - name: Set current date
+        id: current_date
+        env:
+          TZ: 'Asia/Tokyo'
+        run: echo "current_date=$(date +'%Y%m%d%H%M')" >> $GITHUB_ENV
+      - name: Create release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ env.current_date }}
+          release_name: ${{ env.current_date }}
+          draft: false
+          prerelease: false
