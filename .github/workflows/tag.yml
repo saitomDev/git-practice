@@ -23,7 +23,7 @@ jobs:
         run: echo "current_date=$(date +'%Y%m%d%H%M')" >> $GITHUB_ENV
       - name: Get branch name
         id: get_branch_name
-        run: echo "branch_name=${{ github.event.pull_request.head.ref }}" 
+        run: echo "branch_name=${{ github.event.pull_request.head.ref#*/ }}" 
         # >> $GITHUB_ENV
       - name: Create release
         id: create_release
