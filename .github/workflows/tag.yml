@@ -16,14 +16,14 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      - name: Set current date
-        id: current_date
-        env:
-          TZ: 'Asia/Tokyo'
-        run: echo "current_date=$(date +'%Y%m%d%H%M')" >> $GITHUB_ENV
-      - name: Get branch name
-        id: get_branch_name
-        run: echo "branch_name=${{ github.event.pull_request.head.ref#*/ }}" 
+      # - name: Set current date
+      #   id: current_date
+      #   env:
+      #     TZ: 'Asia/Tokyo'
+      #   run: echo "current_date=$(date +'%Y%m%d%H%M')" >> $GITHUB_ENV
+      - name: Get branch date
+        id: get_branch_date
+        run: echo "branch_name=$(echo ${{ github.event.pull_request.head.ref }} | cut -d'/' -f2)"  >> $GITHUB_ENV
         # >> $GITHUB_ENV
       - name: Create release
         id: create_release
@@ -33,7 +33,7 @@ jobs:
         # ERROR :Resource not accessible by integration
         # https://zenn.dev/tatsugon/articles/github-actions-permission-error
         with:
-          tag_name: ${{ env.current_date }}
-          release_name: ${{ env.current_date }}
+          tag_name: ${{ env.branch_name }}
+          release_name: ${{ env.branch_name }}
           draft: false
           prerelease: false
