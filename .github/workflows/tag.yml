@@ -11,6 +11,7 @@ jobs:
   build:
     name: Create Release
     runs-on: ubuntu-latest
+    # runs-on: kintone-dev-larger-runner-1
     if: github.event.pull_request.merged == true && startsWith(github.event.pull_request.head.ref, 'release/')
     steps:
       - name: Get branch date
