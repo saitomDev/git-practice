@@ -6,14 +6,12 @@ on:
       - main
     types: 
       - closed
-    paths:
-      - 'release/**'
 
 jobs:
   build:
     name: Create Release
     runs-on: ubuntu-latest
-    if: github.event.pull_request.merged == true
+    if: github.event.pull_request.merged == true && startsWith(github.event.pull_request.head.ref, 'release/')
     steps:
       - name: Get branch date
         id: get_branch_date
